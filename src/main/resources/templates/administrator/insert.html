@@ -72,12 +72,30 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-12">
-										<label for="passwaord"> パスワード: </label> <label
+										<label for="passwaord"> パスワード: </label> 
+										<label
 											th:if="${#fields.hasErrors('password')}"
 											th:errors="*{password}" class="error-messages">
-											パスワードを入力してください </label> <input type="password" name="password"
+											パスワードを入力してください </label> 
+											<input type="password" name="password"
 											id="password" class="form-control" placeholder="password"
 											th:field="*{password}" th:errorclass="error-input"
+											value="xxxxxxxx">
+									</div>
+								</div>
+							</div>
+							<!-- 確認用パスワード -->
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-12">
+										<label for="conPasswaord"> 確認用パスワード: </label> 
+										<label
+											th:if="${#fields.hasErrors('conPassword')}"
+											th:errors="*{conPassword}" class="error-messages">
+											パスワードを再度入力してください </label>
+											<input type="password" name="conPassword"
+											id="conPassword" class="form-control" placeholder="password"
+											th:field="*{conPassword}" th:errorclass="error-input"
 											value="xxxxxxxx">
 									</div>
 								</div>

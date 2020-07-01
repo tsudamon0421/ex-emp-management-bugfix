@@ -22,6 +22,17 @@ public class InsertAdministratorForm {
 	@NotBlank(message="パスワードの入力は必須です")
 	@Size(min=8, max=24, message="8文字以上24文字以下で入力してください")
 	private String password;
+	
+	/**	確認用パスワード */
+	@NotBlank(message="確認のためパスワードを再度入力してください")
+	private String conPassword;
+	
+	public String getConPassword() {
+		return conPassword;
+	}
+	public void setConPassword(String conPassword) {
+		this.conPassword = conPassword;
+	}
 	public String getName() {
 		return name;
 	}

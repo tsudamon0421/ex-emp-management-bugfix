@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,14 +71,18 @@ public class AdministratorController {
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
 		Administrator administrator = new Administrator();
-		if(result.hasErrors()) {
+		// もしパスワードが一致しない場合、エラーを作ってresultに格納する
+		if (!form.getConPassword().equals(form.getPassword())) {
+			FieldError fieldError = new FieldError(result.getObjectName(), "conPassword", "パスワードが一致しません");
+			result.addError(fieldError);
+		}
+		if (result.hasErrors()) {
 			return toInsert(model);
 		}
-		
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
-		return "redirect:/";
+			// フォームからドメインにプロパティ値をコピー
+			BeanUtils.copyProperties(form, administrator);
+			administratorService.insert(administrator);
+			return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
