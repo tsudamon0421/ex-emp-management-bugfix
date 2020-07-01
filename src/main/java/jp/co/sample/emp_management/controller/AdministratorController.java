@@ -81,7 +81,7 @@ public class AdministratorController {
 			FieldError fieldError = new FieldError(result.getObjectName(), "mailAddress", "このメールアドレスは既に登録されています");
 			result.addError(fieldError);
 		}
-		// エラーが存在する場合
+		// エラーが１つでも存在する場合、エラー情報を渡してログイン画面にリダイレクト
 		if (result.hasErrors()) {
 			return toInsert(model);
 		}
@@ -118,6 +118,8 @@ public class AdministratorController {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
+		//セッションスコープにページで表示するための名前を格納
+		session.setAttribute("Administratorname", administrator.getName());
 		return "forward:/employee/showList";
 	}
 
