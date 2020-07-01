@@ -31,6 +31,7 @@ public class AdministratorService {
 	
 	/**
 	 * ログインをします.
+	 * 
 	 * @param mailAddress メールアドレス
 	 * @param password パスワード
 	 * @return 管理者情報　存在しない場合はnullが返ります
@@ -38,5 +39,19 @@ public class AdministratorService {
 	public Administrator login(String mailAddress, String passward) {
 		Administrator administrator = administratorRepository.findByMailAddressAndPassward(mailAddress, passward);
 		return administrator;
+	}
+	
+	/**
+	 * メールアドレスの重複を確認.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return　重複していない場合 true、重複している場合 falseが返ります
+	 */
+	public boolean checkMailAddress(String mailAddress) {
+		if (administratorRepository.findByMailAddress(mailAddress) == null) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

@@ -76,13 +76,19 @@ public class AdministratorController {
 			FieldError fieldError = new FieldError(result.getObjectName(), "conPassword", "パスワードが一致しません");
 			result.addError(fieldError);
 		}
+		// メールアドレスの重複確認 重複している場合、エラーを作ってresultに格納する
+		if (administratorService.checkMailAddress(form.getMailAddress()) == false) {// 重複している場合
+			FieldError fieldError = new FieldError(result.getObjectName(), "mailAddress", "このメールアドレスは既に登録されています");
+			result.addError(fieldError);
+		}
+		// エラーが存在する場合
 		if (result.hasErrors()) {
 			return toInsert(model);
 		}
-			// フォームからドメインにプロパティ値をコピー
-			BeanUtils.copyProperties(form, administrator);
-			administratorService.insert(administrator);
-			return "redirect:/";
+		// エラーが存在しない場合、フォームからドメインにプロパティ値をコピー
+		BeanUtils.copyProperties(form, administrator);
+		administratorService.insert(administrator);
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
