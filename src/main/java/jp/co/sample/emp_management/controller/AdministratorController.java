@@ -70,7 +70,6 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
-		Administrator administrator = new Administrator();
 		// もしパスワードが一致しない場合、エラーを作ってresultに格納する
 		if (!form.getConPassword().equals(form.getPassword())) {
 			FieldError fieldError = new FieldError(result.getObjectName(), "conPassword", "パスワードが一致しません");
@@ -86,6 +85,7 @@ public class AdministratorController {
 			return toInsert(model);
 		}
 		// エラーが存在しない場合、フォームからドメインにプロパティ値をコピー
+		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 		return "redirect:/";

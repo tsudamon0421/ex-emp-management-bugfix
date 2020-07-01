@@ -1,5 +1,6 @@
 package jp.co.sample.emp_management.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,17 @@ public class EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	/**
 	 * 従業員情報を全件取得します.
 	 * 
-	 * @return　従業員情報一覧
+	 * @return 従業員情報一覧
 	 */
 	public List<Employee> showList() {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return employeeList;
 	}
-	
+
 	/**
 	 * 従業員情報を取得します.
 	 * 
@@ -43,11 +44,29 @@ public class EmployeeService {
 		Employee employee = employeeRepository.load(id);
 		return employee;
 	}
-	
+
+	/**
+	 * 名前のあいまい検索で従業員情報を取得します.
+	 * 名前が空もしくはnullの場合は全件取得します
+	 * 
+	 * @param name 名前(一部)
+	 * @return 従業員情報一覧。
+	 * 
+	 */
+	public List<Employee> showByName(String name) {
+		List<Employee> employeeList = new ArrayList<>();
+		if (name == null || name == "") {
+			employeeList = employeeRepository.findAll();
+		}else {
+		employeeList = employeeRepository.findByName(name);
+		}
+		return employeeList;
+	}
+
 	/**
 	 * 従業員情報を更新します.
 	 * 
-	 * @param employee　更新した従業員情報
+	 * @param employee 更新した従業員情報
 	 */
 	public void update(Employee employee) {
 		employeeRepository.update(employee);

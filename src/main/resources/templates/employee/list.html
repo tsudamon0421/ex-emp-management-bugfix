@@ -63,7 +63,13 @@
 <!-- ここから上を編集する必要はありません -->
 
 <!-- ここにモックのtable要素を貼り付けます -->
-
+<!-- あいまい検索欄 -->
+<form th:action="@{/employee/showByName}" method="post">
+名前検索：
+<input type="text" name="name">
+<button>検索</button>
+</form>
+<div th:text="${message}"></div>
 				<table class="table table-striped">
 					<thead>
 						<tr>
