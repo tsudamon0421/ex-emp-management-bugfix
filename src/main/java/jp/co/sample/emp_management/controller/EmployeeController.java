@@ -1,8 +1,12 @@
 package jp.co.sample.emp_management.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,11 +43,13 @@ public class EmployeeController {
 	public UpdateEmployeeForm setUpForm() {
 		return new UpdateEmployeeForm();
 	}
-	
+
 	@ModelAttribute
 	public InsertEmployeeForm setUpInsertForm() {
 		InsertEmployeeForm insertEmployeeForm = new InsertEmployeeForm();
 		insertEmployeeForm.setGender("女性");
+		Date sqlDate = Date.valueOf("2020-04-01");
+		insertEmployeeForm.setHireDate(sqlDate);
 		return insertEmployeeForm;
 	}
 
@@ -77,7 +83,7 @@ public class EmployeeController {
 	public String showByName(String name, Model model) {
 		List<Employee> employeeList = new ArrayList<>();
 		employeeList = employeeService.showByName(name);
-		if(employeeList.size()==0) {
+		if (employeeList.size() == 0) {
 			model.addAttribute("message", "1件もありませんでした");
 			employeeList = employeeService.showList();
 		}
@@ -122,7 +128,7 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
-	
+
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員情報を登録する
 	/////////////////////////////////////////////////////
@@ -135,31 +141,61 @@ public class EmployeeController {
 	public String showInsert(Model model) {
 		return "employee/insert";
 	}
-	
-	public java.util.Date convertToUtilDate(java.sql.Date sqlDate){
-	    return sqlDate;
+
+	/**
+	 * java.sql.Dateをjava.util.Dateに変換するメソッド.
+	 * 
+	 * @param sqlDate
+	 * @return
+	 */
+	public java.util.Date convertToUtilDate(java.sql.Date sqlDate) {
+		return sqlDate;
 	}
-	
+
 	/**
 	 * 従業員情報を登録して従業員一覧画面へリダイレクトします.
-	 * @param form　従業員情報
+	 * 
+	 * @param form   従業員情報
 	 * @param result エラー情報
-	 * @param model　
-	 * @return　従業員一覧画面へリダイレクト
+	 * @param model
+	 * @return 従業員一覧画面へリダイレクト
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping("/insert")
-	public String insert(@Validated InsertEmployeeForm form, BindingResult result, Model model) {
-		if(result.hasErrors()) {
+	synchronized String insert(@Validated InsertEmployeeForm form, BindingResult result, Model model)
+			throws UnsupportedEncodingException, IOException {
+		if (result.hasErrors()) {
 			return showInsert(model);
 		}
+		// フォームから画像データを取得し、拡張子を判定する
+		String name = (form.getImage().getOriginalFilename());
+		// System.out.println("ファイルの名前：" + name);
+		String extention = name.substring(name.lastIndexOf("."));
+		extention = extention.replace(".", "");
+		// jpgの場合はjpegに書き換える
+		if ("jpg".equals(extention)) {
+			extention = "jpeg";
+		}
+		// System.out.println("拡張子:" + extention);
+
+		// フォームから画像データを取得し、base64にエンコードし、String型にする
+		String imageBase64 = new String(Base64.encodeBase64(form.getImage().getBytes()), "ASCII");
+
+		String imageSource = "data:image/" + extention + ";base64," + imageBase64;
+
 		Employee employee = new Employee();
+		// フォームからドメインに値をコピー
 		BeanUtils.copyProperties(form, employee);
-		//public java.util.Date convertToUtilDate(java.sql.Date sqlDate){
+		// コピーできないものを手動でコピー
 		employee.setHireDate(convertToUtilDate(form.getHireDate()));
 		employee.setSalary(Integer.parseInt(form.getSalary()));
+		employee.setImage(imageSource);
+
 		employeeService.insert(employee);
-		
+
 		return "redirect:/employee/showList";
+
 	}
 
 }

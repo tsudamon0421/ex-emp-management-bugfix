@@ -84,7 +84,7 @@
 								<tr>
 									<th nowrap>写真</th>
 									<td><img src="../../static/img/e2.png"
-										th:src="${'/img/' + employee.image}" /></td>
+										th:src="${employee.image}" width="200"/></td>
 								</tr>
 								<tr>
 									<th nowrap>性別</th>
@@ -149,8 +149,10 @@
 		</div>
 	</div>
 	<!-- end container -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../../static/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<!-- 	<script -->
+	<script src="../../static/js/get_address.js"
+		th:src="@{/js/get_address.js}"></script>
+
 </body>
 </html>

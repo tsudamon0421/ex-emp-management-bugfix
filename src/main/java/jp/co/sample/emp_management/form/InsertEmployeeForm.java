@@ -1,10 +1,11 @@
 package jp.co.sample.emp_management.form;
 
-
 import java.sql.Date;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 従業員登録用のフォームクラス.
@@ -15,33 +16,31 @@ import javax.validation.constraints.NotBlank;
 public class InsertEmployeeForm {
 
 	/** 従業員名 */
-	@NotBlank(message="氏名の入力は必須です")
+	@NotBlank(message = "氏名の入力は必須です")
 	private String name;
 	/** 画像 */
-	@NotBlank(message="画像の添付は必須です")
-	private String image;
+	private MultipartFile image;
 	/** 性別 */
 	private String gender;
 	/** 入社日 */
 	private Date hireDate;
 	/** メールアドレス */
-	@NotBlank(message="メールアドレスの入力は必須です")
-	@Email(message="メールアドレスの形式が不正です")
+	@NotBlank(message = "メールアドレスの入力は必須です")
+	@Email(message = "メールアドレスの形式が不正です")
 	private String mailAddress;
 	/** 郵便番号 */
-	@NotBlank(message="郵便番号の入力は必須です")
 	private String zipCode;
 	/** 住所 */
-	@NotBlank(message="住所の入力は必須です")
+	@NotBlank(message = "住所の入力は必須です")
 	private String address;
 	/** 電話番号 */
-	@NotBlank(message="電話番号の入力は必須です")
+	@NotBlank(message = "電話番号の入力は必須です")
 	private String telephone;
 	/** 給料 */
-	@NotBlank(message="給料の入力は必須です")
+	@NotBlank(message = "給料の入力は必須です")
 	private String salary;
 	/** 特性 */
-	@NotBlank(message="特性の入力は必須です")
+	@NotBlank(message = "特性の入力は必須です")
 	private String characteristics;
 	/** 扶養人数 */
 	private Integer dependentsCount;
@@ -62,11 +61,11 @@ public class InsertEmployeeForm {
 		this.name = name;
 	}
 
-	public String getImage() {
+	public MultipartFile getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
 
@@ -77,7 +76,6 @@ public class InsertEmployeeForm {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
 
 	public Date getHireDate() {
 		return hireDate;

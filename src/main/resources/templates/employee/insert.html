@@ -37,7 +37,7 @@
 
 			<!-- ここにモックのform要素を貼り付けます -->
 
-			<form method="post" th:action="@{/employee/insert}"
+			<form method="post" th:action="@{/employee/insert}" enctype="multipart/form-data"
 				th:object="${insertEmployeeForm}">
 				<fieldset>
 					<legend>
@@ -50,7 +50,7 @@
 								<label for="name"> 氏名: </label> <label
 									th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
 									class="error-messages"> 氏名を入力してください </label> <input type="text"
-									name="name" id="name" class="form-control" placeholder="山田太郎"
+									name="name" id="name" class="form-control" placeholder="例)山田太郎"
 									th:field="*{name}" th:errorclass="error-input" value="山田太郎">
 							</div>
 						</div>
@@ -62,8 +62,9 @@
 								<label for="image"> 顔写真: </label> <label
 									th:if="${#fields.hasErrors('image')}" th:errors="*{image}"
 									class="error-messages"> 画像をアップロードしてください </label> <input
-									type="file" name="image" id="image" th:field="*{image}"
+									type="file" name="image" id="image" th:field="*{image}" accept="image/*"
 									th:errorclass="error-input" value="xxxxx">
+									<img id="preview" width="100">
 							</div>
 						</div>
 					</div>
@@ -101,7 +102,7 @@
 									th:errors="*{mailAddress}" class="error-messages">
 									メールアドレスを入力してください </label> <input type="text" name="mailAddress"
 									id="mailAddress" class="form-control"
-									placeholder="yamada@mail.com" th:field="*{mailAddress}"
+									placeholder="例)yamada@mail.com" th:field="*{mailAddress}"
 									th:errorclass="error-input" value="yamada@mail.com">
 							</div>
 						</div>
@@ -114,7 +115,7 @@
 									th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"
 									class="error-messages"> 郵便番号を入力してください </label> <input
 									type="text" name="password" id="zipCode" class="form-control"
-									placeholder="ハイフンは不要です" th:field="*{zipCode}"
+									placeholder="例)1110000(ハイフンは不要です)" th:field="*{zipCode}"
 									th:errorclass="error-input" value="xxxxxxxx">
 								<button id="get_address_btn" type="button">住所取得</button>
 							</div>
@@ -128,7 +129,7 @@
 									th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
 									class="error-messages"> 住所を入力してください </label> <input type="text"
 									name="address" id="address" class="form-control"
-									placeholder="都道府県 郡市町村区 番地 号 建物名 部屋番号" th:field="*{address}"
+									placeholder="例)東京都新宿区1-1-1" th:field="*{address}"
 									th:errorclass="error-input" value="xxxxxxxx">
 							</div>
 						</div>
@@ -141,7 +142,7 @@
 									th:if="${#fields.hasErrors('telephone')}"
 									th:errors="*{telephone}" class="error-messages">
 									電話番号を入力してください </label> <input type="text" name="telephone"
-									id="telephone" class="form-control" placeholder="xxx-xxxx-xxxx"
+									id="telephone" class="form-control" placeholder="例)090-0000-0000"
 									th:field="*{telephone}" th:errorclass="error-input"
 									value="xxxxxxxx">
 							</div>
@@ -155,7 +156,7 @@
 									th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"
 									class="error-messages"> 給料を入力してください </label> <input type="text"
 									name="salary" id="salary" class="form-control"
-									placeholder="000,000" th:field="*{salary}"
+									placeholder="例)300,000" th:field="*{salary}"
 									th:errorclass="error-input" value="xxxxxxxx">
 							</div>
 						</div>
@@ -169,7 +170,7 @@
 									th:errors="*{characteristics}" class="error-messages">
 									特性を入力してください </label>
 								<textarea rows="5" cols="50" name="characteristics"
-									id="characteristics" class="form-control"
+									id="characteristics" class="form-control" placeholder="特性を入力してください"
 									th:field="*{characteristics}" th:errorclass="error-input">特性を入力してください</textarea>
 							</div>
 						</div>
