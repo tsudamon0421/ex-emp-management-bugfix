@@ -111,14 +111,14 @@ public class AdministratorController {
 	 * @param result エラー情報格納用オブッジェクト
 	 * @return ログイン後の従業員一覧画面
 	 */
+
 	@RequestMapping("/login")
 	public String login(LoginForm form, BindingResult result, Model model) {
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
 		if (administrator == null) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
-		}
-		//セッションスコープにページで表示するための名前を格納
+		} // セッションスコープにページで表示するための名前を格納
 		session.setAttribute("Administratorname", administrator.getName());
 		return "forward:/employee/showList";
 	}
@@ -136,10 +136,9 @@ public class AdministratorController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
+
 	/**
-	 *505エラーを出すテストのためのメソッド.
-	 * ここで発生した例外はGlobalExceptionHandlerが捕獲し処理をします
+	 * 505エラーを出すテストのためのメソッド. ここで発生した例外はGlobalExceptionHandlerが捕獲し処理をします
 	 * 
 	 * @throws ArithmeticException このメソッドは必ずArithmeticExceptionを発生します
 	 */
@@ -152,6 +151,5 @@ public class AdministratorController {
 
 		return "通常はここにHTML名を書くが、ここまで処理は来ない";
 	}
-
 
 }

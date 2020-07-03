@@ -50,6 +50,7 @@ public class EmployeeController {
 		insertEmployeeForm.setGender("女性");
 		Date sqlDate = Date.valueOf("2020-04-01");
 		insertEmployeeForm.setHireDate(sqlDate);
+		
 		return insertEmployeeForm;
 	}
 
@@ -171,9 +172,15 @@ public class EmployeeController {
 			FieldError fieldError = new FieldError(result.getObjectName(), "mailAddress", "このメールアドレスは既に登録されています");
 			result.addError(fieldError);
 		}
+		//画像の未入力チェック
+		if(form.getImage() == null) {
+			FieldError imageFieldError = new FieldError(result.getObjectName(), "image", "画像がアップロードされていません");
+			result.addError(imageFieldError);
+		}
 		if (result.hasErrors()) {
 			return showInsert(model);
 		}
+		
 		// フォームから画像データを取得し、拡張子を判定する
 		String name = (form.getImage().getOriginalFilename());
 		// System.out.println("ファイルの名前：" + name);
