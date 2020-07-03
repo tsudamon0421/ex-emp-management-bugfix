@@ -78,10 +78,10 @@ public class EmployeeRepository {
 	 * 名前のあいまい検索で従業員情報リストを取得します.
 	 * 
 	 * @param name 名前(一部
-	 * @return 従業員情報リスト
+	 * @return 従業員情報リスト(入社日降順)
 	 */
 	public List<Employee> findByName(String name) {
-		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name ;";
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name ORDER BY hire_date DESC;";
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name","%"+ name +"%");
 
@@ -111,5 +111,21 @@ public class EmployeeRepository {
 		String insertSql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count) " + 
 				"VALUES ((select max(id) from employees)+1,:name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount);";
 		template.update(insertSql, param);
+	}
+	
+	/**
+	 * メールアドレスから従業員情報を取得します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 従業員情報 存在しない場合はnullを返します
+	 */
+	public Employee findByMailAddress(String mailAddress) {
+		String sql = "select id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count from employees where mail_address=:mailAddress";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+		if (employeeList.size() == 0) {
+			return null;
+		}
+		return employeeList.get(0);
 	}
 }

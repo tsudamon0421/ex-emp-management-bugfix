@@ -80,4 +80,18 @@ public class EmployeeService {
 	public void insert(Employee employee) {
 		employeeRepository.insert(employee);
 	}
+	
+	/**
+	 * メールアドレスの重複を確認.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return　重複していない場合 true、重複している場合 falseが返ります
+	 */
+	public boolean checkMailAddress(String mailAddress) {
+		if (employeeRepository.findByMailAddress(mailAddress) == null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }

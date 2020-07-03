@@ -3,7 +3,6 @@ package jp.co.sample.emp_management.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,7 +81,7 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showByName")
 	public String showByName(String name, Model model) {
-		List<Employee> employeeList = new ArrayList<>();
+		List<Employee> employeeList = null;
 		employeeList = employeeService.showByName(name);
 		if (employeeList.size() == 0) {
 			model.addAttribute("message", "1件もありませんでした");
@@ -165,6 +165,12 @@ public class EmployeeController {
 	@RequestMapping("/insert")
 	synchronized String insert(@Validated InsertEmployeeForm form, BindingResult result, Model model)
 			throws UnsupportedEncodingException, IOException {
+		
+		// メールアドレスの重複確認 重複している場合、エラーを作ってresultに格納する
+		if (employeeService.checkMailAddress(form.getMailAddress()) == false) {// 重複している場合
+			FieldError fieldError = new FieldError(result.getObjectName(), "mailAddress", "このメールアドレスは既に登録されています");
+			result.addError(fieldError);
+		}
 		if (result.hasErrors()) {
 			return showInsert(model);
 		}
